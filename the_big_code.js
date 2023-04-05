@@ -409,3 +409,21 @@ function test_1_39(n) {
   console.log(`tan(PI/6)              : 0.57735026919`);
   console.log(`cont_frac_approximation: ${tan_cf(Math.PI / 6, n)}`);
 }
+
+/* ----------------
+ * exercise 1-40
+ * */
+function cubic(a, b, c) {
+  return (x) => cube(x) + a * square(x) + b * x + c;
+}
+
+/* ----------------
+ * exercise 1-41
+ * */
+function double(f) {
+  return (x) => f(f(x));
+}
+function test_1_41() {
+  console.log(double(double(double))(inc)(5));
+}
+test_1_41();
