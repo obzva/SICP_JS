@@ -426,4 +426,99 @@ function double(f) {
 function test_1_41() {
   console.log(double(double(double))(inc)(5));
 }
-test_1_41();
+
+/* ----------------
+ * exercise 1-42
+ * */
+function compose(f, g) {
+  return (x) => f(g(x));
+}
+function test_1_42() {
+  console.log(compose(square, inc)(6));
+}
+
+/* ----------------
+ * exercise 1-43
+ * */
+// recursive
+// function repeated(f, n) {
+//   return n === 0 ? identity : compose(f, repeated(f, n - 1));
+// }
+// iterative
+function repeated(f, n) {
+  function iter(g, counter) {
+    return counter > n ? g : iter(compose(f, g), counter + 1);
+  }
+  return iter(identity, 1);
+}
+
+function test_1_43() {
+  console.log(repeated(square, 2)(5));
+}
+
+/* ----------------
+ * exercise 1-44
+ * */
+function smooth(f) {
+  const dx = 0.00001;
+  return (x) => (f(x - dx) + f(x) + f(x + dx)) / 3;
+}
+function n_fold_smooth(f, n) {
+  return repeated(smooth, n)(f);
+}
+
+/* ----------------
+ * exercise 1-45
+ * */
+function nth_root(x, n, m) {
+  return fixed_point(
+    repeated(average_damp, m)((y) => x / Math.pow(y, n - 1)),
+    1
+  );
+}
+
+function test_1_45(n, m) {
+  const x = 7;
+  const real = Math.pow(x, 1 / n).toFixed(5);
+  const appr = nth_root(x, n, m).toFixed(5);
+  console.log(`test|n=${n}, m=${m}`);
+  console.log(`real: ${real}`);
+  console.log(`appr: ${appr}`);
+  console.log(`----result: ${real === appr}`);
+}
+// let i = 32;
+// while (true) {
+//   test_1_45(i, 5);
+//   i += 1;
+// }
+/* average_damp | nth_root
+ *  1            | ~3
+ *  2            | ~7
+ *  3            | ~15
+ *  4            | ~31
+ *  5            | ~63
+ * mth repeated average damp can cover about 2 ** (m + 1) - 1 th root calculation
+ * */
+
+/* ----------------
+ * exercise 1-46
+ * */
+function iterative_improve(is_good_enough, improve) {
+  function iter(guess) {
+    return is_good_enough(guess) ? guess : iter(improve(guess));
+  }
+  return iter;
+}
+function sqrt_1_46(x) {
+  return iterative_improve(
+    (guess) => Math.abs(guess - x) < 0.001,
+    (guess) => average(guess, x / guess)
+  )(1);
+}
+function fixed_point_1_46(f, first_guess) {
+  return iterative_improve(
+    (guess) => Math.abs(guess - f(guess)) < 0.00001,
+    (guess) => f(guess)
+  )(first_guess);
+}
+// maximum call stack size exceeded
