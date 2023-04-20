@@ -133,3 +133,25 @@ function test_2_2() {
   console.log(midpoint_segment(s));
 }
 /*----------------*/
+
+/*----------------
+ * Exercise 2. 3*/
+function make_rect(point_1, point_2) {
+  return pair(point_1, point_2);
+}
+
+function widith_rect(rect) {
+  return Math.abs(x_point(head(rect)) - x_point(tail(rect)));
+}
+
+function height_rect(rect) {
+  return Math.abs(y_point(head(rect)) - y_point(tail(rect)));
+}
+
+function peri_rect(rect) {
+  return 2 * (widith_rect(rect) + height_rect(rect));
+}
+
+function area_rect(rect) {
+  return widith_rect(rect) * height_rect(rect);
+}
