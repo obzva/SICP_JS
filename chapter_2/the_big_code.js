@@ -136,22 +136,18 @@ function test_2_2() {
 
 /*----------------
  * Exercise 2. 3*/
-function make_rect(point_1, point_2) {
-  return pair(point_1, point_2);
-}
-
-function widith_rect(rect) {
-  return Math.abs(x_point(head(rect)) - x_point(tail(rect)));
-}
-
-function height_rect(rect) {
-  return Math.abs(y_point(head(rect)) - y_point(tail(rect)));
-}
-
 function peri_rect(rect) {
-  return 2 * (widith_rect(rect) + height_rect(rect));
+  return 2 * (len_seg(get_a(rect)) + len_seg(get_b(rect)));
 }
-
 function area_rect(rect) {
   return widith_rect(rect) * height_rect(rect);
+}
+function len_seg(seg) {
+  const p = head(seg);
+  const q = tail(seg);
+  const x1 = head(p);
+  const y1 = tail(p);
+  const x2 = head(q);
+  const y2 = tail(q);
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
