@@ -136,13 +136,39 @@ function test_2_2() {
 
 /*----------------
  * Exercise 2. 3*/
+
 function peri_rect(rect) {
-  return 2 * (len_seg(get_a(rect)) + len_seg(get_b(rect)));
+  return 2 * (get_width(rect) + get_height(rect));
 }
 function area_rect(rect) {
-  return widith_rect(rect) * height_rect(rect);
+  return get_width(rect) * get_height(rect);
 }
-function len_seg(seg) {
+function make_rect_1(p1, p2, p3) {
+  return pair(pair(p1, p2), p3);
+}
+// for make_rect_1
+// function get_width(rect) {
+//   const p2 = tail(head(rect));
+//   const p3 = tail(rect);
+//   const segment = make_segment(p2, p3);
+//   return len_segment(segment);
+// }
+// function get_height(rect) {
+//   const p1 = head(head(rect));
+//   const p2 = tail(head(rect));
+//   const segment = make_segment(p1, p2);
+//   return len_segment(segment);
+// }
+function make_rect_2(width, height, angle, point) {
+  return pair(pair(width, height), pair(angle, point));
+}
+function get_width(rect) {
+  return head(head(rect));
+}
+function get_height(rect) {
+  return tail(head(rect));
+}
+function len_segment(seg) {
   const p = head(seg);
   const q = tail(seg);
   const x1 = head(p);
@@ -151,3 +177,4 @@ function len_seg(seg) {
   const y2 = tail(q);
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
+/*----------------*/
