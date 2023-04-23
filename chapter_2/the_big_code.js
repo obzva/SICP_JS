@@ -22,37 +22,37 @@ function equal_rat(x, y) {
   return numer(x) * denom(y) === numer(y) * denom(x);
 }
 
-function pair(x, xs) {
-  return [x, xs];
-}
-
-function is_pair(x) {
-  return array_test(x) && x.length === 2;
-}
-
-function array_test(x) {
-  return Array.isArray(x);
-}
-
-function head(xs) {
-  if (is_pair(xs)) {
-    return xs[0];
-  } else {
-    throw new Error(
-      "head(xs) expects a pair as argument xs, but xs is not a pair"
-    );
-  }
-}
-
-function tail(xs) {
-  if (is_pair(xs)) {
-    return xs[1];
-  } else {
-    throw new Error(
-      "tail(xs) expects a pair as argument xs, but xs is not a pair"
-    );
-  }
-}
+// function pair(x, xs) {
+//   return [x, xs];
+// }
+//
+// function is_pair(x) {
+//   return array_test(x) && x.length === 2;
+// }
+//
+// function array_test(x) {
+//   return Array.isArray(x);
+// }
+//
+// function head(xs) {
+//   if (is_pair(xs)) {
+//     return xs[0];
+//   } else {
+//     throw new Error(
+//       "head(xs) expects a pair as argument xs, but xs is not a pair"
+//     );
+//   }
+// }
+//
+// function tail(xs) {
+//   if (is_pair(xs)) {
+//     return xs[1];
+//   } else {
+//     throw new Error(
+//       "tail(xs) expects a pair as argument xs, but xs is not a pair"
+//     );
+//   }
+// }
 
 // function make_rat(n, d) {
 //   return pair(n, d);
@@ -178,3 +178,62 @@ function len_segment(seg) {
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
 /*----------------*/
+
+// function pair(p, q) {
+//   function dispatch(action) {
+//     return action === 0
+//       ? p
+//       : action === 1
+//       ? q
+//       : new Error(`expected action to be 0 or 1, but action=${action}`);
+//   }
+//   return dispatch;
+// }
+// function head(p) {
+//   return p(0);
+// }
+// function tail(p) {
+//   return p(1);
+// }
+
+/*----------------
+ * Exercise 2.4*/
+// function pair(x, y) {
+//   return (m) => m(x, y);
+// }
+// function head(p) {
+//   return p((a, b) => a);
+// }
+// function tail(p) {
+//   return p((a, b) => b);
+// }
+/*----------------*/
+
+/*----------------
+ * Exercise 2.5*/
+function pair(x, y) {
+  return Math.pow(2, x) * Math.pow(3, y);
+}
+function head(p) {
+  return p % 2 === 0 ? head(p / 2) + 1 : 0;
+}
+function tail(p) {
+  return p % 3 === 0 ? tail(p / 2) + 1 : 0;
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.6*/
+const one = (f) => (x) => f(x);
+const two = (f) => (x) => f(f(x));
+function plus(a, b) {
+  return (f) => (x) => a(f)(b(f)(x));
+}
+function church_to_number(c) {
+  return c((n) => n + 1)(0);
+}
+function test_2_5() {
+  console.log("one", church_to_number(one));
+  console.log("two", church_to_number(two));
+  console.log("three", church_to_number(plus(one, two)));
+}
