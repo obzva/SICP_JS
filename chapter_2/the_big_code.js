@@ -22,37 +22,37 @@ function equal_rat(x, y) {
   return numer(x) * denom(y) === numer(y) * denom(x);
 }
 
-// function pair(x, xs) {
-//   return [x, xs];
-// }
-//
-// function is_pair(x) {
-//   return array_test(x) && x.length === 2;
-// }
-//
-// function array_test(x) {
-//   return Array.isArray(x);
-// }
-//
-// function head(xs) {
-//   if (is_pair(xs)) {
-//     return xs[0];
-//   } else {
-//     throw new Error(
-//       "head(xs) expects a pair as argument xs, but xs is not a pair"
-//     );
-//   }
-// }
-//
-// function tail(xs) {
-//   if (is_pair(xs)) {
-//     return xs[1];
-//   } else {
-//     throw new Error(
-//       "tail(xs) expects a pair as argument xs, but xs is not a pair"
-//     );
-//   }
-// }
+function pair(x, xs) {
+  return [x, xs];
+}
+
+function is_pair(x) {
+  return array_test(x) && x.length === 2;
+}
+
+function array_test(x) {
+  return Array.isArray(x);
+}
+
+function head(xs) {
+  if (is_pair(xs)) {
+    return xs[0];
+  } else {
+    throw new Error(
+      "head(xs) expects a pair as argument xs, but xs is not a pair"
+    );
+  }
+}
+
+function tail(xs) {
+  if (is_pair(xs)) {
+    return xs[1];
+  } else {
+    throw new Error(
+      "tail(xs) expects a pair as argument xs, but xs is not a pair"
+    );
+  }
+}
 
 // function make_rat(n, d) {
 //   return pair(n, d);
@@ -211,15 +211,15 @@ function len_segment(seg) {
 
 /*----------------
  * Exercise 2.5*/
-function pair(x, y) {
-  return Math.pow(2, x) * Math.pow(3, y);
-}
-function head(p) {
-  return p % 2 === 0 ? head(p / 2) + 1 : 0;
-}
-function tail(p) {
-  return p % 3 === 0 ? tail(p / 2) + 1 : 0;
-}
+// function pair(x, y) {
+//   return Math.pow(2, x) * Math.pow(3, y);
+// }
+// function head(p) {
+//   return p % 2 === 0 ? head(p / 2) + 1 : 0;
+// }
+// function tail(p) {
+//   return p % 3 === 0 ? tail(p / 2) + 1 : 0;
+// }
 /*----------------*/
 
 /*----------------
@@ -236,4 +236,108 @@ function test_2_5() {
   console.log("one", church_to_number(one));
   console.log("two", church_to_number(two));
   console.log("three", church_to_number(plus(one, two)));
+}
+/*----------------*/
+function add_interval(x, y) {
+  return make_interval(
+    lower_bound(x) + lower_bound(y),
+    upper_bound(x) + upper_bound(y)
+  );
+}
+function mul_interval(x, y) {
+  const p1 = lower_bound(x) * lower_bound(y);
+  const p2 = lower_bound(x) * upper_bound(y);
+  const p3 = upper_bound(x) * lower_bound(y);
+  const p4 = upper_bound(x) * upper_bound(y);
+  return make_interval(Math.min(p1, p2, p3, p4), Math.max(p1, p2, p3, p4));
+}
+// function div_interval(x, y) {
+//   return mul_interval(
+//     x,
+//     make_interval(
+//       1 / upper_bound(y),
+//
+//       1 / lower_bound(y)
+//     )
+//   );
+// }
+/*----------------
+ * Exercise 2.7
+ * the solution from Source Academy is wrong*/
+function make_interval(x, y) {
+  return pair(x, y);
+}
+function upper_bound(interval) {
+  return head(interval) >= tail(interval) ? head(interval) : tail(interval);
+}
+function lower_bound(interval) {
+  return head(interval) < tail(interval) ? head(interval) : tail(interval);
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.8*/
+// sub_interval(x, y)
+// the minimum value the difference could be is 'lower_bound(x) - upper_bound(y)'
+// and for the maximum value, 'upper_bound(x) - lower_bound(y)'
+function sub_interval(x, y) {
+  return make_interval(
+    lower_bound(x) - upper_bound(y),
+    upper_bound(x) - lower_bound(y)
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.9*/
+function width_interval(interval) {
+  return (upper_bound(interval) - lower_bound(interval)) / 2;
+}
+function test_2_9() {
+  const a = make_interval(34, 90);
+  const b = make_interval(22, 43);
+  const a_width = width_interval(a);
+  const b_width = width_interval(b);
+  console.log("ADD:", a_width + b_width === width_interval(add_interval(a, b)));
+  console.log("SUB:", a_width - b_width === width_interval(sub_interval(a, b)));
+  console.log("MUL:", a_width * b_width === width_interval(mul_interval(a, b)));
+  console.log("DIV:", a_width / b_width === width_interval(div_interval(a, b)));
+  console.log("a_width:", a_width);
+  console.log("b_width:", b_width);
+  console.log(
+    "a add b:",
+    a_width + b_width,
+    width_interval(add_interval(a, b))
+  );
+  console.log(
+    "a sub b:",
+    a_width - b_width,
+    width_interval(sub_interval(a, b))
+  );
+  console.log(
+    "a mul b:",
+    a_width * b_width,
+    width_interval(mul_interval(a, b))
+  );
+  console.log(
+    "a div b:",
+    a_width / b_width,
+    width_interval(div_interval(a, b))
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.10*/
+function div_interval(x, y) {
+  if (lower_bound(y) * upper_bound(y) <= 0)
+    throw new Error("interval is crossing zero");
+  return mul_interval(
+    x,
+    make_interval(
+      1 / upper_bound(y),
+
+      1 / lower_bound(y)
+    )
+  );
 }
