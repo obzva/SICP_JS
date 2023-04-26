@@ -244,13 +244,13 @@ function add_interval(x, y) {
     upper_bound(x) + upper_bound(y)
   );
 }
-function mul_interval(x, y) {
-  const p1 = lower_bound(x) * lower_bound(y);
-  const p2 = lower_bound(x) * upper_bound(y);
-  const p3 = upper_bound(x) * lower_bound(y);
-  const p4 = upper_bound(x) * upper_bound(y);
-  return make_interval(Math.min(p1, p2, p3, p4), Math.max(p1, p2, p3, p4));
-}
+// function mul_interval(x, y) {
+//   const p1 = lower_bound(x) * lower_bound(y);
+//   const p2 = lower_bound(x) * upper_bound(y);
+//   const p3 = upper_bound(x) * lower_bound(y);
+//   const p4 = upper_bound(x) * upper_bound(y);
+//   return make_interval(Math.min(p1, p2, p3, p4), Math.max(p1, p2, p3, p4));
+// }
 // function div_interval(x, y) {
 //   return mul_interval(
 //     x,
@@ -341,3 +341,72 @@ function div_interval(x, y) {
     )
   );
 }
+/*-----------------*/
+
+/*----------------
+ * Exercise 2.11*/
+function mul_interval(x, y) {
+  const xu = upper_bound(x);
+  const xl = lower_bound(x);
+  const yu = upper_bound(y);
+  const yl = lower_bound(y);
+  return xu >= 0 && xl >= 0 && yu >= 0 && yl >= 0
+    ? make_interval(xu * yu, xl * yl)
+    : xu >= 0 && xl >= 0 && yu >= 0 && yl < 0
+    ? make_interval(xu * yu, xu * yl)
+    : xu >= 0 && xl >= 0 && yu < 0 && yl < 0
+    ? make_interval(xu * yu, xl * yl)
+    : xu >= 0 && xl < 0 && yu >= 0 && yl >= 0
+    ? make_interval(xu * yu, xl * yu)
+    : xu >= 0 && xl < 0 && yu >= 0 && yl < 0
+    ? make_interval(
+        Math.max(xu * yu, xu * yl, xl * yu, xl * yl),
+        Math.min(xu * yu, xu * yl, xl * yu, xl * yl)
+      )
+    : xu >= 0 && xl < 0 && yu < 0 && yl < 0
+    ? make_interval(xu * yl, xl * yl)
+    : xu < 0 && xl < 0 && yu >= 0 && yl >= 0
+    ? make_interval(xl * yu, xu * yl)
+    : xu < 0 && xl < 0 && yu >= 0 && yl < 0
+    ? make_interval(xl * yu, xl * yl)
+    : make_interval(xu * yu, xl * yl);
+}
+/*----------------*/
+
+function make_center_width(c, w) {
+  return make_interval(c - w, c + w);
+}
+function center(i) {
+  return (lower_bound(i) + upper_bound(i)) / 2;
+}
+function width(i) {
+  return (upper_bound(i) - lower_bound(i)) / 2;
+}
+
+/*----------------
+ * Exercise 2.12*/
+function make_center_percent(c, p) {
+  return make_center_width(c, (c * p) / 100);
+}
+function percent(i) {
+  return (width(i) / center(i)) * 100;
+}
+/*----------------*/
+
+/*-----------------
+ * Exercise 2.13*/
+// let x = make_center_percent(xc, xp);
+//     y = make_center_percent(yc, yp);
+// then, xl = xc - xc * xp / 100 = xc * (1 - xp / 100)
+//       xu = xc + xc * xp / 100 = xc * (1 + xp / 100)
+//       yl = yc - yc * yp / 100 = yc * (1 - yp / 100)
+//       yu = yc + yc * yp / 100 = yc * (1 + yp / 100)
+//
+// xl * yl = xc * yc * (1 - xp / 100) * (1 - yp / 100)
+//         = (xc * yc) * (1 - (xp + yp) / 100 + (xp * yp / 100) / 100)
+//         = (xc * yc) * (1 - 99 * (xp * yp / 100) / 100)
+// xu * yu = xc * yc * (1 + xp / 100) * (1 + yp / 100)
+//         = (xc * yc) * (1 + (xp + yp) / 100 + (xp * yp / 100) / 100)
+//         = (xc * yc) * (1 + 101 * (xp * yp / 100) / 100)
+// therefore the tolerance of the product of intervals is roughly the result of the multiplication of the tolerances of the intervals
+/*----------------*/
