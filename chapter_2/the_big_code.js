@@ -410,3 +410,68 @@ function percent(i) {
 //         = (xc * yc) * (1 + 101 * (xp * yp / 100) / 100)
 // therefore the tolerance of the product of intervals is roughly the result of the multiplication of the tolerances of the intervals
 /*----------------*/
+
+/*----------------
+ * Exercise 2.14*/
+function par1(r1, r2) {
+  return div_interval(mul_interval(r1, r2), add_interval(r1, r2));
+}
+function par2(r1, r2) {
+  const one = make_interval(1, 1);
+  return div_interval(
+    one,
+    add_interval(div_interval(one, r1), div_interval(one, r2))
+  );
+}
+function test_2_14() {
+  const a = make_center_width(1000, 1);
+  const b = make_center_width(2500, 5);
+  const aa = div_interval(a, a);
+  const ab = div_interval(a, b);
+  const ba = div_interval(b, a);
+  const bb = div_interval(b, b);
+  console.log("---center");
+  console.log("aa", center(aa));
+  console.log("ab", center(ab));
+  console.log("ba", center(ba));
+  console.log("bb", center(bb));
+  console.log("---percentage");
+  console.log("aa", percent(aa));
+  console.log("ab", percent(ab));
+  console.log("ba", percent(ba));
+  console.log("bb", percent(bb));
+}
+test_2_14();
+/*-----------------*/
+
+/*----------------
+ * Exercise 2.15*/
+// This question touches on the subject of identity. The reason that the two procedures return different results is because of the way interval division works. This is a somewhat hard problem in mathematics.
+//
+//     Of course, if you divide any regular number by itself, the result is always
+//     . So if we have an interval
+//     , we would expect
+//
+// to also be
+//     .
+//
+//     The reason why this does not happen is because
+//
+// is a stateless function, that is, we do not have the information that the
+// in the denominator and the
+// in the numerator are in fact the same value. Because
+// is an interval, for all we know, those two
+// s could refer to different values within the same range. In other words, while
+//     could refer to any given value within an interval, every instance of
+// within the same function always refers to the same value. But there is no way to tell the function that, so it produces overly wide error margins.
+//
+//     This uncertainty increases proportionally to the number of instances of an uncertain interval like
+// being divided by itself. Because par2 does not contain a division of an interval by itself, this is not an issue, and Eva is correct in saying that par2 will yield a more accurate result. Although this may or may not be a good thing, since it may be useful to reflect uncertainty in the result if it exists. So whether par2 is actually the better function depends entirely on the use case.
+// from:https://www.timwoerner.de/posts/sicp/exercises/2/15/#answer
+/*----------------*/
+
+/*----------------
+ * Exercise 2.16*/
+//this is too difficult
+//https://stackoverflow.com/questions/14130878/sicp-2-16-interval-arithmetic-scheme
+/*----------------*/
