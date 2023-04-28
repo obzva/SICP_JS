@@ -441,7 +441,6 @@ function test_2_14() {
   console.log("ba", percent(ba));
   console.log("bb", percent(bb));
 }
-test_2_14();
 /*-----------------*/
 
 /*----------------
@@ -475,3 +474,28 @@ test_2_14();
 //this is too difficult
 //https://stackoverflow.com/questions/14130878/sicp-2-16-interval-arithmetic-scheme
 /*----------------*/
+
+function list(...elements) {
+  let theList = null;
+  for (let i = elements.length - 1; i >= 0; i -= 1) {
+    theList = pair(elements[i], theList);
+  }
+  return theList;
+}
+function list_ref(index, items) {
+  return index === 0 ? head(items) : list_ref(index - 1, tail(items));
+}
+// recursive
+// function length(items) {
+//   return is_null(items) ? 0 : 1 + length(tail(items));
+// }
+// iterative
+function length(items) {
+  function iter(v, count) {
+    return is_null(v) ? count : iter(tail(v), count + 1);
+  }
+  return iter(items, 0);
+}
+function is_null(v) {
+  return v === null;
+}
