@@ -592,3 +592,47 @@ function test_2_20() {
   );
 }
 /*----------------*/
+
+// function scale_list(items, factor) {
+//   return is_null(items)
+//     ? null
+//     : pair(head(items) * factor, scale_list(tail(items), factor));
+// }
+function map(fn, items) {
+  return is_null(items) ? null : pair(fn(head(items)), map(fn, tail(items)));
+}
+function scale_list(items, factor) {
+  return map((x) => x * factor, items);
+}
+
+/*----------------
+ * Exercise 2.21*/
+// function square_list(items) {
+//   return is_null(items)
+//     ? null
+//     : pair(head(items) * head(items), square_list(tail(items)));
+// }
+function square_list(items) {
+  return map(square, items);
+}
+function square(x) {
+  return x * x;
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.22*/
+// For the first implementation, he put squared elements from the bottom of the list.
+// For the second one, the structure of nesting of the pair function is wrong.
+/*----------------*/
+
+/*----------------
+ * Exercise 2.23*/
+function for_each(fn, items) {
+  function iter(things) {
+    fn(head(things));
+    for_each(fn, tail(things));
+  }
+  return is_null(items) ? null : iter(items);
+}
+/*----------------*/
