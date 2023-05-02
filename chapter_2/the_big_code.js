@@ -503,3 +503,92 @@ function is_null(v) {
 function append(list1, list2) {
   return is_null(list1) ? list2 : pair(head(list1), append(tail(list1), list2));
 }
+
+/*----------------
+ * Exercise 2.17*/
+function last_pair(items) {
+  return is_null(tail(items)) ? items : last_pair(tail(items));
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.18*/
+// function reverse(items) {
+//   return is_null(items)
+//     ? null
+//     : append(reverse(tail(items)), pair(head(items), null));
+// }
+function reverse(items) {
+  function iter(arr, res) {
+    return is_null(arr) ? res : iter(tail(arr), pair(head(arr), res));
+  }
+  return iter(items, null);
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.19*/
+const us_coins = list(50, 25, 10, 5, 1);
+const us_coins_reverse = reverse(us_coins);
+function count_change(amount, coins) {
+  return cc(amount, coins);
+}
+// function cc(amount, kinds_of_coins) {
+//   return amount === 0
+//     ? 1
+//     : amount < 0 || kinds_of_coins === 0
+//     ? 0
+//     : cc(amount, kinds_of_coins - 1) +
+//       cc(amount - first_denomination(kinds_of_coins), kinds_of_coins);
+// }
+function cc(amount, coin_values) {
+  return amount === 0
+    ? 1
+    : amount < 0 || no_more(coin_values)
+    ? 0
+    : cc(amount, except_first_denomination(coin_values)) +
+      cc(amount - first_denomination(coin_values), coin_values);
+}
+function first_denomination(coin_values) {
+  return head(coin_values);
+}
+function except_first_denomination(coin_values) {
+  return tail(coin_values);
+}
+function no_more(coin_values) {
+  return is_null(coin_values);
+}
+function test_2_19() {
+  console.log(
+    "Does the order of the coin_values affect the result of the function count_change? ->",
+    count_change(100, us_coins) !== count_change(100, us_coins_reverse)
+  );
+  console.log(
+    "The parameter coin_values is unordered list so that it doesn't affect the result"
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.20*/
+function plus_curried(x) {
+  return (y) => x + y;
+}
+function brooks(curried_fn, items) {
+  return is_null(items)
+    ? curried_fn
+    : brooks(curried_fn(head(items)), tail(items));
+}
+// we need to make certain that the length of the items is 2
+function brooks_curried(params) {
+  return brooks(head(params), tail(params));
+}
+function test_2_20() {
+  console.log(brooks_curried(list(brooks_curried, list(plus_curried, 3, 4))));
+  console.log(
+    brooks_curried(
+      list(brooks_curried(list(brooks_curried, list(plus_curried, 3, 4))))
+    )
+  );
+}
+/*----------------*/
