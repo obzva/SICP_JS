@@ -499,7 +499,6 @@ function length(items) {
 function is_null(v) {
   return v === null;
 }
-// recursive
 function append(list1, list2) {
   return is_null(list1) ? list2 : pair(head(list1), append(tail(list1), list2));
 }
@@ -635,4 +634,122 @@ function for_each(fn, items) {
   }
   return is_null(items) ? null : iter(items);
 }
+/*----------------*/
+
+function count_leaves(x) {
+  return is_null(x)
+    ? 0
+    : !is_pair(x)
+    ? 1
+    : count_leaves(head(x)) + count_leaves(tail(x));
+}
+
+/*----------------
+ * Exercise 2.24*/
+// Just draw it
+/*----------------*/
+
+/*----------------
+ * Exercise 2.25*/
+function test_2_25() {
+  const l1 = list(1, 3, list(5, 7), 9);
+  const l2 = list(list(7));
+  const l3 = list(1, list(2, list(3, list(4, list(5, list(6, 7))))));
+
+  console.log("l1 = list(1, 3, list(5, 7), 9)");
+  console.log(
+    "-> head(tail(head(tail(tail(l1))))) = ",
+    head(tail(head(tail(tail(l1)))))
+  );
+  console.log("l2 = list(list(7))");
+  console.log("-> head(head(l2)) = ", head(head(l2)));
+  console.log("l3 = list(1, list(2, list(3, list(4, list(5, list(6, 7))))))");
+  console.log(
+    "-> head(tail(head(tail(head(tail(head(tail(head(tail(head(tail(l3)))))))))))) = ",
+    head(tail(head(tail(head(tail(head(tail(head(tail(head(tail(l3))))))))))))
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.26*/
+function test_2_26() {
+  const x = list(1, 2, 3);
+  const y = list(4, 5, 6);
+  console.log("In list notation, ");
+  console.log("append(x, y) = list(1, 2, 3, 4, 5, 6, null)");
+  console.log("pair(x, y) = list(list(1, 2, 3, null), list(4, 5, 6, null))");
+  console.log(
+    "list(x, y) = list(list(1, 2, 3, null), list(4, 5, 6, null), null)"
+  );
+  console.log("In box notation,");
+  console.log("append(x, y) = [1, [2, [3, [4, [5, [6, null]]]]]]");
+  console.log("pair(x, y) = [[1, [2, [3, null]]], [4, [5, [6, null]]]]");
+  console.log(
+    "list(x, y) = [[1, [2, [3, null]]], [[4, [5, [6, null]]], null]]"
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.27*/
+function deep_reverse(items) {
+  return is_null(items)
+    ? null
+    : is_pair(items)
+    ? append(deep_reverse(tail(items)), list(deep_reverse(head(items))))
+    : items;
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.28*/
+function fringe(items) {
+  return is_null(items)
+    ? null
+    : is_pair(items)
+    ? append(fringe(head(items)), fringe(tail(items)))
+    : list(items);
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.29*/
+function make_mobile(left, right) {
+  return list(left, right);
+}
+function make_branch(length, structure) {
+  return list(length, structure);
+}
+// a
+function left_branch(mobile) {
+  return head(mobile);
+}
+function right_branch(mobile) {
+  return head(tail(mobile));
+}
+function branch_length(branch) {
+  return head(branch);
+}
+function branch_structure(branch) {
+  return head(tail(branch));
+}
+// b
+function total_weight(mobile) {
+  const lb = left_branch(mobile);
+  const rb = right_branch(mobile);
+  const left_weight = is_pair(lb) ? total_weight(lb) : lb;
+  const right_weight = is_pair(rb) ? total_weight(rb) : rb;
+  return left_weight + right_weight;
+}
+// c
+function is_mobile_balanced(mobile) {
+  const lb = left_branch(mobile);
+  const rb = right_branch(mobile);
+  const left_length = branch_length(lb);
+  const right_length = branch_length(rb);
+  return left_length * total_weight(lb) === right_length * total_weight(rb);
+}
+// d
+// If we change our constructors from using list to using pair, head(tail()) part of selectors should be changed into tail().
 /*----------------*/
