@@ -753,3 +753,64 @@ function is_mobile_balanced(mobile) {
 // d
 // If we change our constructors from using list to using pair, head(tail()) part of selectors should be changed into tail().
 /*----------------*/
+
+// function scale_tree(tree, factor) {
+//   return is_null(tree)
+//     ? null
+//     : is_pair(tree)
+//     ? pair(scale_tree(head(tree), factor), scale_tree(tail(tree), factor))
+//     : tree * factor;
+// }
+function scale_tree(tree, factor) {
+  return map(
+    (sub_tree) =>
+      is_pair(sub_tree) ? scale_tree(sub_tree, factor) : sub_tree * factor,
+    tree
+  );
+}
+
+/*----------------
+ * Exercise 2.30*/
+// direct implementation
+// function square_tree(tree) {
+//   return is_null(tree)
+//     ? null
+//     : is_pair(tree)
+//     ? pair(square_tree(head(tree)), square_tree(tail(tree)))
+//     : square(tree);
+// }
+// using map
+function square_tree(tree) {
+  return map(
+    (sub_tree) =>
+      is_pair(sub_tree) ? square_tree(sub_tree) : square(sub_tree),
+    tree
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.31*/
+function tree_map(fn, tree) {
+  return map(
+    (sub_tree) => (is_pair(sub_tree) ? tree_map(fn, sub_tree) : fn(sub_tree)),
+    tree
+  );
+}
+/*----------------*/
+
+/*----------------
+ * Exercise 2.32*/
+function subsets(s) {
+  if (is_null(s)) {
+    // If the set is empty, then its one and only subset is an empty set itself
+    return list(null);
+  } else {
+    const rest = subsets(tail(s));
+    return append(
+      rest,
+      map((e) => pair(head(s), e), rest)
+    );
+  }
+}
+/*----------------*/
