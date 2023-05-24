@@ -224,19 +224,19 @@ function len_segment(seg) {
 
 /*----------------
  * Exercise 2.6*/
-const one = (f) => (x) => f(x);
-const two = (f) => (x) => f(f(x));
-function plus(a, b) {
-  return (f) => (x) => a(f)(b(f)(x));
-}
-function church_to_number(c) {
-  return c((n) => n + 1)(0);
-}
-function test_2_5() {
-  console.log("one", church_to_number(one));
-  console.log("two", church_to_number(two));
-  console.log("three", church_to_number(plus(one, two)));
-}
+// const one = (f) => (x) => f(x);
+// const two = (f) => (x) => f(f(x));
+// function plus(a, b) {
+//   return (f) => (x) => a(f)(b(f)(x));
+// }
+// function church_to_number(c) {
+//   return c((n) => n + 1)(0);
+// }
+// function test_2_6() {
+//   console.log("one", church_to_number(one));
+//   console.log("two", church_to_number(two));
+//   console.log("three", church_to_number(plus(one, two)));
+// }
 /*----------------*/
 function add_interval(x, y) {
   return make_interval(
@@ -485,23 +485,27 @@ function list(...elements) {
 function list_ref(index, items) {
   return index === 0 ? head(items) : list_ref(index - 1, tail(items));
 }
+
+// redeclared at line 935
 // recursive
 // function length(items) {
 //   return is_null(items) ? 0 : 1 + length(tail(items));
 // }
 // iterative
-function length(items) {
-  function iter(v, count) {
-    return is_null(v) ? count : iter(tail(v), count + 1);
-  }
-  return iter(items, 0);
-}
-function is_null(v) {
-  return v === null;
-}
-function append(list1, list2) {
-  return is_null(list1) ? list2 : pair(head(list1), append(tail(list1), list2));
-}
+// function length(items) {
+//   function iter(v, count) {
+//     return is_null(v) ? count : iter(tail(v), count + 1);
+//   }
+//   return iter(items, 0);
+// }
+// function is_null(v) {
+//   return v === null;
+// }
+
+// redeclared at line 929
+// function append(list1, list2) {
+//   return is_null(list1) ? list2 : pair(head(list1), append(tail(list1), list2));
+// }
 
 /*----------------
  * Exercise 2.17*/
@@ -597,9 +601,11 @@ function test_2_20() {
 //     ? null
 //     : pair(head(items) * factor, scale_list(tail(items), factor));
 // }
-function map(fn, items) {
-  return is_null(items) ? null : pair(fn(head(items)), map(fn, tail(items)));
-}
+
+// redeclared at line 925
+// function map(fn, items) {
+//   return is_null(items) ? null : pair(fn(head(items)), map(fn, tail(items)));
+// }
 function scale_list(items, factor) {
   return map((x) => x * factor, items);
 }
@@ -814,3 +820,123 @@ function subsets(s) {
   }
 }
 /*----------------*/
+
+// redeclared at line 884
+// function sum_odd_squares(tree) {
+//   return is_null(tree)
+//     ? 0
+//     : !is_pair(tree)
+//     ? is_odd(tree)
+//       ? square(tree)
+//       : 0
+//     : sum_odd_squares(head(tree)) + sum_odd_squares(tail(tree));
+// }
+
+function is_odd(v) {
+  return v % 2 !== 0;
+}
+
+// redeclared at line 895
+// function even_fibs(n) {
+//   function next(k) {
+//     if (k > n) {
+//       return null;
+//     }
+//     const f = fib(k);
+//     return is_even(f) ? pair(f, next(k + 1)) : next(k + 1);
+//   }
+//   return next(0);
+// }
+
+function fib(n) {
+  return n === 0 ? 0 : n === 1 ? 1 : fib(n - 1) + fib(n - 2);
+}
+
+function is_even(v) {
+  return v % 2 === 0;
+}
+
+function filter(predicate, sequence) {
+  return is_null(sequence)
+    ? null
+    : predicate(head(sequence))
+    ? pair(head(sequence), filter(predicate, tail(sequence)))
+    : filter(predicate, tail(sequence));
+}
+
+function accumulate(operation, initial_value, sequence) {
+  return is_null(sequence)
+    ? initial_value
+    : operation(
+        head(sequence),
+        accumulate(operation, initial_value, tail(sequence))
+      );
+}
+
+function enumerate_interval(low, high) {
+  return low > high ? null : pair(low, enumerate_interval(low + 1, high));
+}
+
+function enumerate_tree(tree) {
+  return is_null(tree)
+    ? null
+    : !is_pair(tree)
+    ? list(tree)
+    : append(enumerate_tree(head(tree)), enumerate_tree(tail(tree)));
+}
+
+/**
+ * enumerate -> filter -> map -> accumulate
+ */
+function sum_odd_squares(tree) {
+  return accumulate(plus, 0, map(square, filter(is_odd, enumerate_tree(tree))));
+}
+
+function plus(a, b) {
+  return a + b;
+}
+
+/**
+ * enumerate -> map -> filter -> accumulate
+ */
+function even_fibs(n) {
+  return accumulate(
+    pair,
+    null,
+    filter(is_even, map(fib, enumerate_interval(0, n)))
+  );
+}
+
+function list_fib_squares(n) {
+  return accumulate(
+    pair,
+    null,
+    map(square, map(fib, enumerate_interval(0, n)))
+  );
+}
+
+function product_of_squares_of_odd_elements(sequence) {
+  return accumulate(times, 1, map(square, filter(is_odd, sequence)));
+}
+
+function times(a, b) {
+  return a * b;
+}
+
+/** ----------------
+ * Exercise 2.33
+ */
+function map(f, sequence) {
+  return accumulate((x, y) => pair(f(x), y), null, sequence);
+}
+
+function append(sequence1, sequence2) {
+  return accumulate(pair, sequence2, sequence1);
+}
+
+function length(sequence) {
+  return accumulate((x, y) => 1 + y, 0, sequence);
+}
+/**
+ * ----------------
+ */
