@@ -80,14 +80,13 @@ function print_rat(x) {
 //   return pair(n / g, d / g);
 // }
 
-/*----------------
+/**
  * Exercise 2. 1*/
 function maker_rat(n, d) {
   const g = gcd(n, d);
   const isPositive = n * d >= 0;
   return isPositive ? pair(n / g, d / g) : pair(-(n / g), d / g);
 }
-/*----------------*/
 
 /* ----------------
  * Exercise 2. 2*/
@@ -132,9 +131,8 @@ function test_2_2() {
   const s = make_segment(a, b);
   console.log(midpoint_segment(s));
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2. 3*/
 
 function peri_rect(rect) {
@@ -177,7 +175,6 @@ function len_segment(seg) {
   const y2 = tail(q);
   return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
-/*----------------*/
 
 // function pair(p, q) {
 //   function dispatch(action) {
@@ -196,7 +193,7 @@ function len_segment(seg) {
 //   return p(1);
 // }
 
-/*----------------
+/**
  * Exercise 2.4*/
 // function pair(x, y) {
 //   return (m) => m(x, y);
@@ -207,9 +204,8 @@ function len_segment(seg) {
 // function tail(p) {
 //   return p((a, b) => b);
 // }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.5*/
 // function pair(x, y) {
 //   return Math.pow(2, x) * Math.pow(3, y);
@@ -220,9 +216,8 @@ function len_segment(seg) {
 // function tail(p) {
 //   return p % 3 === 0 ? tail(p / 2) + 1 : 0;
 // }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.6*/
 // const one = (f) => (x) => f(x);
 // const two = (f) => (x) => f(f(x));
@@ -237,7 +232,7 @@ function len_segment(seg) {
 //   console.log("two", church_to_number(two));
 //   console.log("three", church_to_number(plus(one, two)));
 // }
-/*----------------*/
+
 function add_interval(x, y) {
   return make_interval(
     lower_bound(x) + lower_bound(y),
@@ -261,7 +256,7 @@ function add_interval(x, y) {
 //     )
 //   );
 // }
-/*----------------
+/**
  * Exercise 2.7
  * the solution from Source Academy is wrong*/
 function make_interval(x, y) {
@@ -273,9 +268,8 @@ function upper_bound(interval) {
 function lower_bound(interval) {
   return head(interval) < tail(interval) ? head(interval) : tail(interval);
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.8*/
 // sub_interval(x, y)
 // the minimum value the difference could be is 'lower_bound(x) - upper_bound(y)'
@@ -286,9 +280,8 @@ function sub_interval(x, y) {
     upper_bound(x) - lower_bound(y)
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.9*/
 function width_interval(interval) {
   return (upper_bound(interval) - lower_bound(interval)) / 2;
@@ -325,9 +318,8 @@ function test_2_9() {
     width_interval(div_interval(a, b))
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.10*/
 function div_interval(x, y) {
   if (lower_bound(y) * upper_bound(y) <= 0)
@@ -341,9 +333,9 @@ function div_interval(x, y) {
     )
   );
 }
-/*-----------------*/
+/**-*/
 
-/*----------------
+/**
  * Exercise 2.11*/
 function mul_interval(x, y) {
   const xu = upper_bound(x);
@@ -371,7 +363,6 @@ function mul_interval(x, y) {
     ? make_interval(xl * yu, xl * yl)
     : make_interval(xu * yu, xl * yl);
 }
-/*----------------*/
 
 function make_center_width(c, w) {
   return make_interval(c - w, c + w);
@@ -383,7 +374,7 @@ function width(i) {
   return (upper_bound(i) - lower_bound(i)) / 2;
 }
 
-/*----------------
+/**
  * Exercise 2.12*/
 function make_center_percent(c, p) {
   return make_center_width(c, (c * p) / 100);
@@ -391,9 +382,8 @@ function make_center_percent(c, p) {
 function percent(i) {
   return (width(i) / center(i)) * 100;
 }
-/*----------------*/
 
-/*-----------------
+/**-
  * Exercise 2.13*/
 // let x = make_center_percent(xc, xp);
 //     y = make_center_percent(yc, yp);
@@ -409,9 +399,8 @@ function percent(i) {
 //         = (xc * yc) * (1 + (xp + yp) / 100 + (xp * yp / 100) / 100)
 //         = (xc * yc) * (1 + 101 * (xp * yp / 100) / 100)
 // therefore the tolerance of the product of intervals is roughly the result of the multiplication of the tolerances of the intervals
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.14*/
 function par1(r1, r2) {
   return div_interval(mul_interval(r1, r2), add_interval(r1, r2));
@@ -441,9 +430,9 @@ function test_2_14() {
   console.log("ba", percent(ba));
   console.log("bb", percent(bb));
 }
-/*-----------------*/
+/**-*/
 
-/*----------------
+/**
  * Exercise 2.15*/
 // This question touches on the subject of identity. The reason that the two procedures return different results is because of the way interval division works. This is a somewhat hard problem in mathematics.
 //
@@ -467,13 +456,11 @@ function test_2_14() {
 //     This uncertainty increases proportionally to the number of instances of an uncertain interval like
 // being divided by itself. Because par2 does not contain a division of an interval by itself, this is not an issue, and Eva is correct in saying that par2 will yield a more accurate result. Although this may or may not be a good thing, since it may be useful to reflect uncertainty in the result if it exists. So whether par2 is actually the better function depends entirely on the use case.
 // from:https://www.timwoerner.de/posts/sicp/exercises/2/15/#answer
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.16*/
 //this is too difficult
 //https://stackoverflow.com/questions/14130878/sicp-2-16-interval-arithmetic-scheme
-/*----------------*/
 
 function list(...elements) {
   let theList = null;
@@ -498,38 +485,37 @@ function list_ref(index, items) {
 //   }
 //   return iter(items, 0);
 // }
-// function is_null(v) {
-//   return v === null;
-// }
+function is_null(v) {
+  return v === null;
+}
 
 // redeclared at line 929
 // function append(list1, list2) {
 //   return is_null(list1) ? list2 : pair(head(list1), append(tail(list1), list2));
 // }
 
-/*----------------
+/**
  * Exercise 2.17*/
 function last_pair(items) {
   return is_null(tail(items)) ? items : last_pair(tail(items));
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.18*/
+// redeclared at line 1010
 // function reverse(items) {
 //   return is_null(items)
 //     ? null
 //     : append(reverse(tail(items)), pair(head(items), null));
 // }
-function reverse(items) {
-  function iter(arr, res) {
-    return is_null(arr) ? res : iter(tail(arr), pair(head(arr), res));
-  }
-  return iter(items, null);
-}
-/*----------------*/
+// function reverse(items) {
+//   function iter(arr, res) {
+//     return is_null(arr) ? res : iter(tail(arr), pair(head(arr), res));
+//   }
+//   return iter(items, null);
+// }
 
-/*----------------
+/**
  * Exercise 2.19*/
 const us_coins = list(50, 25, 10, 5, 1);
 const us_coins_reverse = reverse(us_coins);
@@ -570,9 +556,8 @@ function test_2_19() {
     "The parameter coin_values is unordered list so that it doesn't affect the result"
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.20*/
 function plus_curried(x) {
   return (y) => x + y;
@@ -594,7 +579,6 @@ function test_2_20() {
     )
   );
 }
-/*----------------*/
 
 // function scale_list(items, factor) {
 //   return is_null(items)
@@ -610,7 +594,7 @@ function scale_list(items, factor) {
   return map((x) => x * factor, items);
 }
 
-/*----------------
+/**
  * Exercise 2.21*/
 // function square_list(items) {
 //   return is_null(items)
@@ -623,15 +607,13 @@ function square_list(items) {
 function square(x) {
   return x * x;
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.22*/
 // For the first implementation, he put squared elements from the bottom of the list.
 // For the second one, the structure of nesting of the pair function is wrong.
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.23*/
 function for_each(fn, items) {
   function iter(things) {
@@ -640,22 +622,21 @@ function for_each(fn, items) {
   }
   return is_null(items) ? null : iter(items);
 }
-/*----------------*/
 
-function count_leaves(x) {
-  return is_null(x)
-    ? 0
-    : !is_pair(x)
-    ? 1
-    : count_leaves(head(x)) + count_leaves(tail(x));
-}
+// redeclared at line 927
+// function count_leaves(x) {
+//   return is_null(x)
+//     ? 0
+//     : !is_pair(x)
+//     ? 1
+//     : count_leaves(head(x)) + count_leaves(tail(x));
+// }
 
-/*----------------
+/**
  * Exercise 2.24*/
 // Just draw it
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.25*/
 function test_2_25() {
   const l1 = list(1, 3, list(5, 7), 9);
@@ -675,9 +656,8 @@ function test_2_25() {
     head(tail(head(tail(head(tail(head(tail(head(tail(head(tail(l3))))))))))))
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.26*/
 function test_2_26() {
   const x = list(1, 2, 3);
@@ -695,9 +675,8 @@ function test_2_26() {
     "list(x, y) = [[1, [2, [3, null]]], [[4, [5, [6, null]]], null]]"
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.27*/
 function deep_reverse(items) {
   return is_null(items)
@@ -706,9 +685,8 @@ function deep_reverse(items) {
     ? append(deep_reverse(tail(items)), list(deep_reverse(head(items))))
     : items;
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.28*/
 function fringe(items) {
   return is_null(items)
@@ -717,9 +695,8 @@ function fringe(items) {
     ? append(fringe(head(items)), fringe(tail(items)))
     : list(items);
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.29*/
 function make_mobile(left, right) {
   return list(left, right);
@@ -758,7 +735,6 @@ function is_mobile_balanced(mobile) {
 }
 // d
 // If we change our constructors from using list to using pair, head(tail()) part of selectors should be changed into tail().
-/*----------------*/
 
 // function scale_tree(tree, factor) {
 //   return is_null(tree)
@@ -775,7 +751,7 @@ function scale_tree(tree, factor) {
   );
 }
 
-/*----------------
+/**
  * Exercise 2.30*/
 // direct implementation
 // function square_tree(tree) {
@@ -793,9 +769,8 @@ function square_tree(tree) {
     tree
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.31*/
 function tree_map(fn, tree) {
   return map(
@@ -803,9 +778,8 @@ function tree_map(fn, tree) {
     tree
   );
 }
-/*----------------*/
 
-/*----------------
+/**
  * Exercise 2.32*/
 function subsets(s) {
   if (is_null(s)) {
@@ -819,7 +793,6 @@ function subsets(s) {
     );
   }
 }
-/*----------------*/
 
 // redeclared at line 884
 // function sum_odd_squares(tree) {
@@ -923,7 +896,7 @@ function times(a, b) {
   return a * b;
 }
 
-/** ----------------
+/**
  * Exercise 2.33
  */
 function map(f, sequence) {
@@ -937,6 +910,109 @@ function append(sequence1, sequence2) {
 function length(sequence) {
   return accumulate((x, y) => 1 + y, 0, sequence);
 }
+
 /**
- * ----------------
+ * Exercise 2.34
  */
+function horner_eval(x, coefficient_sequence) {
+  return accumulate(
+    (this_coeff, higher_terms) => this_coeff + x * higher_terms,
+    0,
+    coefficient_sequence
+  );
+}
+
+/**
+ * Exercise 2.35
+ */
+// my solution
+// function count_leaves(tree) {
+//   return accumulate(
+//     plus,
+//     0,
+//     map((x) => 1, enumerate_tree(tree))
+//   );
+// }
+
+// solution from source academy
+function count_leaves(tree) {
+  return accumulate(
+    plus,
+    0,
+    map((sub_tree) => (is_pair(sub_tree) ? count_leaves(sub_tree) : 1), tree)
+  );
+}
+
+/**
+ * Exercise 2.36
+ */
+function accumulate_n(op, init, seqs) {
+  return is_null(head(seqs))
+    ? null
+    : pair(
+        accumulate(
+          op,
+          init,
+          map((seq) => head(seq), seqs)
+        ),
+        accumulate_n(
+          op,
+          init,
+          map((seq) => tail(seq), seqs)
+        )
+      );
+}
+
+/**
+ * Exercise 2.37
+ */
+function dot_product(v, w) {
+  return accumulate(plus, 0, accumulate_n(times, 1, list(v, w)));
+}
+
+function matrix_times_vector(m, v) {
+  return map((row) => dot_product(row, v), m);
+}
+
+function transpose(m) {
+  return accumulate_n((x, y) => pair(x, y), null, m);
+}
+
+function matrix_times_matrix(m, n) {
+  const cols = transpose(n);
+  return map((row) => matrix_times_vector(cols, row), m);
+}
+
+/**
+ * Exercise 2.38
+ */
+function fold_left(op, initial, sequence) {
+  function iter(result, rest) {
+    return is_null(rest) ? result : iter(op(result, head(rest)), tail(rest));
+  }
+  return iter(initial, sequence);
+}
+function divide(a, b) {
+  return a / b;
+}
+function fold_right(op, init, seq) {
+  return accumulate(op, init, seq);
+}
+const r1 = fold_right(divide, 1, list(1, 2, 3));
+const r2 = fold_left(divide, 1, list(1, 2, 3));
+const r3 = fold_right(list, null, list(1, 2, 3));
+const r4 = fold_left(list, null, list(1, 2, 3));
+
+const r5 = fold_right(plus, 1, list(1, 2, 3));
+const r6 = fold_left(plus, 1, list(1, 2, 3));
+// op should be communitative and associative
+
+/**
+ * Exercise 2.39
+ */
+// function reverse(sequence) {
+//   return fold_right((x, y) => append(y, list(x)), null, sequence);
+// }
+function reverse(sequence) {
+  return fold_left((x, y) => pair(y, x), null, sequence);
+}
