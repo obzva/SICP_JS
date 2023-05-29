@@ -1016,3 +1016,58 @@ const r6 = fold_left(plus, 1, list(1, 2, 3));
 function reverse(sequence) {
   return fold_left((x, y) => pair(y, x), null, sequence);
 }
+
+function flatmap(f, seq) {
+  return accumulate(append, null, map(f, seq));
+}
+
+function is_prime_sum(p) {
+  return is_prime(head(p) + tail(p));
+}
+
+function is_prime(x) {
+  return x === smallest_divisor(x);
+}
+
+function smallest_divisor(x) {
+  return find_divisor(x, 2);
+}
+
+function find_divisor(x, test_divisor) {
+  return square(test_divisor) > x
+    ? x
+    : divides(test_divisor, x)
+    ? test_divisor
+    : find_divisor(x, test_divisor + 1);
+}
+
+function divides(x, y) {
+  return y % x === 0;
+}
+
+function make_pair_sum(p) {
+  return list(head(p), tail(head(p)), head(p) + tail(head(p)));
+}
+
+function prime_sum_pairs(n) {
+  return map(
+    make_pair_sum,
+    filter(
+      is_prime_sum,
+      flatmap(
+        (x) => map((y) => list(x, y), enumerate_interval(1, x - 1)),
+        enumerate_interval(1, n)
+      )
+    )
+  );
+}
+
+function permutations(s) {
+  return is_null(s)
+    ? list(null)
+    : flatmap((x) => map((p) => pair(x, p), permutations(remove(x, s))), s);
+}
+
+function remove(x, s) {
+  return filter((e) => e !== x, s);
+}
