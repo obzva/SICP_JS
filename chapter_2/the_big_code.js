@@ -469,6 +469,17 @@ function list(...elements) {
   }
   return theList;
 }
+function display_sequence(lst) {
+  if (lst === null) {
+    return "null";
+  } else if (Array.isArray(lst)) {
+    const elements = lst.map(display_sequence);
+    return `[${elements.join(", ")}]`;
+  } else {
+    return lst.toString();
+  }
+}
+
 function list_ref(index, items) {
   return index === 0 ? head(items) : list_ref(index - 1, tail(items));
 }
@@ -1049,18 +1060,19 @@ function make_pair_sum(p) {
   return list(head(p), tail(head(p)), head(p) + tail(head(p)));
 }
 
-function prime_sum_pairs(n) {
-  return map(
-    make_pair_sum,
-    filter(
-      is_prime_sum,
-      flatmap(
-        (x) => map((y) => list(x, y), enumerate_interval(1, x - 1)),
-        enumerate_interval(1, n)
-      )
-    )
-  );
-}
+// redeclared at line 1097
+// function prime_sum_pairs(n) {
+//   return map(
+//     make_pair_sum,
+//     filter(
+//       is_prime_sum,
+//       flatmap(
+//         (x) => map((y) => list(x, y), enumerate_interval(1, x - 1)),
+//         enumerate_interval(1, n)
+//       )
+//     )
+//   );
+// }
 
 function permutations(s) {
   return is_null(s)
@@ -1070,4 +1082,39 @@ function permutations(s) {
 
 function remove(x, s) {
   return filter((e) => e !== x, s);
+}
+
+/**
+ * Exercise 2.40
+ */
+function unique_pairs(n) {
+  return flatmap(
+    (i) => map((j) => pair(j, i), enumerate_interval(1, i - 1)),
+    enumerate_interval(1, n)
+  );
+}
+
+function prime_sum_pairs(n) {
+  return map(make_pair_sum, filter(is_prime_sum, unique_pairs(n)));
+}
+
+/**
+ * Exercise 2.41
+ */
+function unique_triples(n) {
+  return flatmap(
+    (i) =>
+      flatmap(
+        (j) => map((k) => list(k, j, i), enumerate_interval(1, j - 1)),
+        enumerate_interval(1, i - 1)
+      ),
+    enumerate_interval(1, n)
+  );
+}
+
+function three_sum(s, n) {
+  return filter(
+    (triple) => accumulate(plus, 0, triple) === s,
+    unique_triples(n)
+  );
 }
