@@ -1118,3 +1118,31 @@ function three_sum(s, n) {
     unique_triples(n)
   );
 }
+
+/**
+ * Exercise 2.42
+ */
+function adjoin_position(row, col, rest) {
+  return pair(pair(row, col), rest);
+}
+
+const empty_board = null;
+
+function is_safe(positions) {
+  const first_row = head(head(positions));
+  const first_col = tail(head(positions));
+  return accumulate(
+    (pos, next_pos) => {
+      const row = head(head(pos));
+      const col = tail(head(pos));
+      return (
+        first_row !== row &&
+        first_row + first_col !== row + col &&
+        first_row - first_col !== row - col &&
+        next_pos
+      );
+    },
+    true,
+    tail(positions)
+  );
+}
