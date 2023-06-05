@@ -1148,6 +1148,13 @@ function is_safe(positions) {
 }
 
 /**
+ * Exercise 2.43
+ */
+// In Louis' solution, it re-evaluates queen_cols(k - 1) every column in the row.
+// In each queen_cols call(k - 1), it also re-evaluates queen_cols(k - 2) recursively.
+// Therefore, in rough estimation, Louis's solution will take (n^n)*T.
+
+/**
  * Exercise 2.44
  */
 function up_split(painter, n) {
