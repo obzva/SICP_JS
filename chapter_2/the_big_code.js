@@ -1165,39 +1165,8 @@ function up_split(painter, n) {
   return below(painter, beside(smaller, smaller));
 }
 
-/**
- * return identical painter
- * @param painter
- * @returns {*}
- */
-function identity(painter) {
-  return painter;
-}
-
-/**
- * flip painter vertically
- * @param painter
- */
-function flip_vert(painter) {}
-
-/**
- * flip painter horizontally
- * @param painter
- */
-function flip_horiz(painter) {}
-
-/**
- * put painter1 below painter2
- * @param painter1
- * @param painter2
- */
 function below(painter1, painter2) {}
 
-/**
- * put painter1 and painter2 from left to right
- * @param painter1
- * @param painter2
- */
 function beside(painter1, painter2) {}
 
 function square_of_four(tl, tr, bl, br) {
@@ -1219,4 +1188,83 @@ function split(f, g) {
     const smaller = split(f, g)(painter, n - 1);
     return f(painter, g(smaller, smaller));
   };
+}
+
+function frame_coord_map(frame) {
+  return (v) =>
+    add_vect(
+      origin_frame(frame),
+      add_vect(
+        scale_vect(xcor_vect(v), edge1_frame(frame)),
+        scale_vect(ycor_vect(v), edge2_frame(frame))
+      )
+    );
+}
+
+/**
+ * Exercise 2.46
+ */
+function make_vect(x, y) {
+  return pair(x, y);
+}
+
+function xcor_vect(v) {
+  return head(v);
+}
+
+function ycor_vect(v) {
+  return tail(v);
+}
+
+function add_vect(v1, v2) {
+  return make_vect(
+    xcor_vect(v1) + xcor_vect(v2),
+    ycor_vect(v1) + ycor_vect(v2)
+  );
+}
+
+function sub_vect(v1, v2) {
+  return make_vect(
+    xcor_vect(v1) - xcor_vect(v2),
+    ycor_vect(v1) - ycor_vect(v2)
+  );
+}
+
+function scale_vect(s, v) {
+  return make_vect(s * xcor_vect(v), s * ycor_vect(v));
+}
+
+/**
+ * Exercise 2.47
+ */
+// function make_frame(origin, edge1, edge2) {
+//   return list(origin, edge1, edge2);
+// }
+//
+// function origin_frame(frame) {
+//   return head(frame);
+// }
+//
+// function edge1_frame(frame) {
+//   return head(tail(frame));
+// }
+//
+// function edge2_frame(frame) {
+//   return head(tail(tail(frame)));
+// }
+
+function make_frame(origin, edge1, edge2) {
+  return pair(origin, pair(edge1, edge2));
+}
+
+function origin_frame(frame) {
+  return head(frame);
+}
+
+function edge1_frame(frame) {
+  return head(tail(frame));
+}
+
+function edge2_frame(frame) {
+  return tail(tail(frame));
 }
