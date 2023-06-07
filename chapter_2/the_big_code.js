@@ -1164,3 +1164,59 @@ function up_split(painter, n) {
   const smaller = up_split(painter, n - 1);
   return below(painter, beside(smaller, smaller));
 }
+
+/**
+ * return identical painter
+ * @param painter
+ * @returns {*}
+ */
+function identity(painter) {
+  return painter;
+}
+
+/**
+ * flip painter vertically
+ * @param painter
+ */
+function flip_vert(painter) {}
+
+/**
+ * flip painter horizontally
+ * @param painter
+ */
+function flip_horiz(painter) {}
+
+/**
+ * put painter1 below painter2
+ * @param painter1
+ * @param painter2
+ */
+function below(painter1, painter2) {}
+
+/**
+ * put painter1 and painter2 from left to right
+ * @param painter1
+ * @param painter2
+ */
+function beside(painter1, painter2) {}
+
+function square_of_four(tl, tr, bl, br) {
+  return function (painter) {
+    const top = beside(tl(painter), tr(painter));
+    const bottom = beside(bl(painter), br(painter));
+    return below(bottom, top);
+  };
+}
+
+/**
+ * Exercise 2.45
+ */
+function split(f, g) {
+  return function (painter, n) {
+    if (n === 0) {
+      return painter;
+    }
+    const smaller = split(f, g)(painter, n - 1);
+    return f(painter, g(smaller, smaller));
+  };
+}
