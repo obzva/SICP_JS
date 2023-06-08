@@ -1268,3 +1268,30 @@ function edge1_frame(frame) {
 function edge2_frame(frame) {
   return tail(tail(frame));
 }
+
+function segments_to_painter(segment_list) {
+  return (frame) =>
+    for_each(
+      (segment) =>
+        draw_line(
+          frame_coord_map(frame)(start_segment(segment)),
+          frame_coord_map(frame)(end_segment(segment))
+        ),
+      segment_list
+    );
+}
+
+/**
+ * Exercise 2.48
+ */
+// we can use make_segment, start_segment, and end_segment from Exercise 2.2.
+function test_2_48() {
+  const example_vector_1 = make_vect(1, 2);
+  const example_vector_2 = make_vect(3, 4);
+  const example_segment = make_segment(example_vector_1, example_vector_2);
+  const example_start_segment = start_segment(example_segment);
+  const example_end_segment = end_segment(example_segment);
+  console.log("seg", example_segment);
+  console.log("start_seg", example_start_segment);
+  console.log("end_seg", example_end_segment);
+}
