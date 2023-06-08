@@ -1281,6 +1281,8 @@ function segments_to_painter(segment_list) {
     );
 }
 
+function draw_line(p1, p2) {}
+
 /**
  * Exercise 2.48
  */
@@ -1295,3 +1297,78 @@ function test_2_48() {
   console.log("start_seg", example_start_segment);
   console.log("end_seg", example_end_segment);
 }
+
+/**
+ * Exercise 2.49
+ */
+/**
+ * a
+ */
+const tl = make_vect(0, 1);
+const tr = make_vect(1, 1);
+const bl = make_vect(0, 0);
+const br = make_vect(1, 0);
+const outline_segment_1 = make_segment(bl, br);
+const outline_segment_2 = make_segment(br, tr);
+const outline_segment_3 = make_segment(tr, tl);
+const outline_segment_4 = make_segment(tl, bl);
+const outline_segment_list = list(
+  outline_segment_1,
+  outline_segment_2,
+  outline_segment_3,
+  outline_segment_4
+);
+const outline_painter = segments_to_painter(outline_segment_list);
+/**
+ * b
+ */
+const x_segment_1 = make_segment(tl, br);
+const x_segment_2 = make_segment(tr, bl);
+const x_segment_list = list(x_segment_1, x_segment_2);
+const x_painter = segments_to_painter(x_segment_list);
+/**
+ * c
+ */
+const tm = make_vect(0.5, 1);
+const rm = make_vect(1, 0.5);
+const bm = make_vect(0.5, 0);
+const lm = make_vect(0, 0.5);
+const dia_segment_1 = make_segment(tm, rm);
+const dia_segment_2 = make_segment(rm, bm);
+const dia_segment_3 = make_segment(bm, lm);
+const dia_segment_4 = make_segment(lm, tm);
+const dia_segment_list = list(
+  dia_segment_1,
+  dia_segment_2,
+  dia_segment_3,
+  dia_segment_4
+);
+const dia_painter = segments_to_painter(dia_segment_list);
+/**
+ * d
+ */
+const wave_segment_list = list(
+  make_segment(make_vect(0.25, 0), make_vect(0.35, 0.5)),
+  make_segment(make_vect(0.35, 0.5), make_vect(0.3, 0.6)),
+  make_segment(make_vect(0.3, 0.6), make_vect(0.15, 0.4)),
+  make_segment(make_vect(0.15, 0.4), make_vect(0, 0.65)),
+  make_segment(make_vect(0, 0.65), make_vect(0, 0.85)),
+  make_segment(make_vect(0, 0.85), make_vect(0.15, 0.6)),
+  make_segment(make_vect(0.15, 0.6), make_vect(0.3, 0.65)),
+  make_segment(make_vect(0.3, 0.65), make_vect(0.4, 0.65)),
+  make_segment(make_vect(0.4, 0.65), make_vect(0.35, 0.85)),
+  make_segment(make_vect(0.35, 0.85), make_vect(0.4, 1)),
+  make_segment(make_vect(0.4, 1), make_vect(0.6, 1)),
+  make_segment(make_vect(0.6, 1), make_vect(0.65, 0.85)),
+  make_segment(make_vect(0.65, 0.85), make_vect(0.6, 0.65)),
+  make_segment(make_vect(0.6, 0.65), make_vect(0.75, 0.65)),
+  make_segment(make_vect(0.75, 0.65), make_vect(1, 0.35)),
+  make_segment(make_vect(1, 0.35), make_vect(1, 0.15)),
+  make_segment(make_vect(1, 0.15), make_vect(0.6, 0.45)),
+  make_segment(make_vect(0.6, 0.45), make_vect(0.75, 0)),
+  make_segment(make_vect(0.75, 0), make_vect(0.6, 0)),
+  make_segment(make_vect(0.6, 0), make_vect(0.5, 0.3)),
+  make_segment(make_vect(0.5, 0.3), make_vect(0.4, 0)),
+  make_segment(make_vect(0.4, 0), make_vect(0.25, 0))
+);
+const wave = segments_to_painter(wave_segment_list);
