@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/obzva/SICP_JS#readme",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ex": "node chapter_2/the_big_code.js"
   }
 }
