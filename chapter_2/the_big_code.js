@@ -1165,10 +1165,6 @@ function up_split(painter, n) {
   return below(painter, beside(smaller, smaller));
 }
 
-function below(painter1, painter2) {}
-
-function beside(painter1, painter2) {}
-
 function square_of_four(tl, tr, bl, br) {
   return function (painter) {
     const top = beside(tl(painter), tr(painter));
@@ -1374,27 +1370,129 @@ const wave_segment_list = list(
 const wave = segments_to_painter(wave_segment_list);
 
 function transform_painter(painter, origin, corner1, corner2) {
-  return frame => {
+  return (frame) => {
     const m = frame_coord_map(frame);
     const new_origin = m(origin);
     const new_corner1 = m(corner1);
     const new_corner2 = m(corner2);
-    return painter(make_frame(new_origin, sub_vect(new_corner1, new_origin), sub_vect(new_corner2, new_origin)));
-  }
+    return painter(
+      make_frame(
+        new_origin,
+        sub_vect(new_corner1, new_origin),
+        sub_vect(new_corner2, new_origin)
+      )
+    );
+  };
 }
 
 function flip_vert(painter) {
-  return transform_painter(painter, make_vect(0, 1), make_vect(1, 1), make_vect(0, 0));
+  return transform_painter(
+    painter,
+    make_vect(0, 1),
+    make_vect(1, 1),
+    make_vect(0, 0)
+  );
 }
 
 function shrink_to_upper_right(painter) {
-  return transform_painter(painter, make_vect(0, 0), make_vect(0.5, 0), make_vect(0, 0.5));
+  return transform_painter(
+    painter,
+    make_vect(0, 0),
+    make_vect(0.5, 0),
+    make_vect(0, 0.5)
+  );
 }
 
 function rotate90(painter) {
-  return transform_painter(painter, make_vect(1, 0), make_vect(1, 1), make_vect(0, 0));
+  return transform_painter(
+    painter,
+    make_vect(1, 0),
+    make_vect(1, 1),
+    make_vect(0, 0)
+  );
 }
 
 function squash_inwards(painter) {
-  return transform_painter(painter, make_vect(0, 0), make_vect(0.65, 0.35), make_vect(0.35, 0.65));
+  return transform_painter(
+    painter,
+    make_vect(0, 0),
+    make_vect(0.65, 0.35),
+    make_vect(0.35, 0.65)
+  );
+}
+
+function beside(painter1, painter2) {
+  const split_point = make_vect(0.5, 0);
+  const paint_left = transform_painter(
+    painter1,
+    make_vect(0, 0),
+    split_point,
+    make_vect(0, 1)
+  );
+  const paint_right = transform_painter(
+    painter2,
+    split_point,
+    make_vect(1, 0),
+    make_vect(0.5, 1)
+  );
+  return (frame) => {
+    paint_left(frame);
+    paint_right(frame);
+  };
+}
+
+/**
+ * Exercise 2.50
+ */
+function flip_horiz(painter) {
+  return transform_painter(
+    painter,
+    make_vect(1, 0),
+    make_vect(0, 0),
+    make_vect(1, 1)
+  );
+}
+
+function rotate180(painter) {
+  return transform_painter(
+    painter,
+    make_vect(1, 1),
+    make_vect(0, 1),
+    make_vect(1, 0)
+  );
+}
+
+function rotate270(painter) {
+  return transform_painter(
+    painter,
+    make_vect(0, 1),
+    make_vect(0, 0),
+    make_vect(1, 1)
+  );
+}
+
+/**
+ * Exercise 2.51
+ */
+// function below(painter1, painter2) {
+//   const split_point = make_vect(0, 0.5);
+//   const paint_bottom = transform_painter(
+//     painter1,
+//     make_vect(0, 0),
+//     make_vect(1, 0),
+//     split_point
+//   );
+//   const paint_top = transform_painter(
+//     painter2,
+//     split_point,
+//     make_vect(1, 0.5),
+//     make_vect(0, 1)
+//   );
+//   return (frame) => {
+//     paint_top(frame);
+//     paint_bottom(frame);
+//   };
+// }
+function below(painter1, painter2) {
+  return rotate90(beside(rotate270(painter1), rotate270(painter2)));
 }
