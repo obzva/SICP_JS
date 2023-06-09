@@ -1372,3 +1372,29 @@ const wave_segment_list = list(
   make_segment(make_vect(0.4, 0), make_vect(0.25, 0))
 );
 const wave = segments_to_painter(wave_segment_list);
+
+function transform_painter(painter, origin, corner1, corner2) {
+  return frame => {
+    const m = frame_coord_map(frame);
+    const new_origin = m(origin);
+    const new_corner1 = m(corner1);
+    const new_corner2 = m(corner2);
+    return painter(make_frame(new_origin, sub_vect(new_corner1, new_origin), sub_vect(new_corner2, new_origin)));
+  }
+}
+
+function flip_vert(painter) {
+  return transform_painter(painter, make_vect(0, 1), make_vect(1, 1), make_vect(0, 0));
+}
+
+function shrink_to_upper_right(painter) {
+  return transform_painter(painter, make_vect(0, 0), make_vect(0.5, 0), make_vect(0, 0.5));
+}
+
+function rotate90(painter) {
+  return transform_painter(painter, make_vect(1, 0), make_vect(1, 1), make_vect(0, 0));
+}
+
+function squash_inwards(painter) {
+  return transform_painter(painter, make_vect(0, 0), make_vect(0.65, 0.35), make_vect(0.35, 0.65));
+}
