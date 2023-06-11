@@ -1496,3 +1496,142 @@ function rotate270(painter) {
 function below(painter1, painter2) {
   return rotate90(beside(rotate270(painter1), rotate270(painter2)));
 }
+
+/**
+ * Exercise 2.52
+ */
+// I'll skip this.
+
+function member(item, x) {
+  return is_null(x) ? null : item === head(x) ? x : member(item, tail(x));
+}
+
+/**
+ * Exercise 2.53
+ */
+// list("a", "b", "c")
+// -> box: ["a", ["b", ["c", null]]]
+// list(list("george"))
+// -> box: [["george", null], null]
+// tail(list(list("x1", "x2"), list("y1", "y2")))
+// -> box: [["y1", ["y2", null]], null]
+// tail(head(list(list("x1", "x2"), list("y1", "y2"))))
+// -> box: ["x2", null]
+// member("red", list("blue", "shoes", "yellow", "socks"))
+// -> null
+// member("red", list("red", "shoes", "blue", "socks"))
+// -> list: list("red", "shoes", "blue", "socks")list("red", "shoes", "blue", "socks")
+// -> box: ["red", ["shoes", ["blue", ["socks", null]]]]
+
+/**
+ * Exercise 2.54
+ */
+function equal(a, b) {
+  if (is_pair(a) && is_pair(b)) {
+    return equal(head(a), head(b)) && equal(tail(a), tail(b));
+  }
+  if (!is_pair(a) && !is_pair(b)) {
+    return a === b;
+  }
+  return false;
+}
+
+/**
+ * Exercise 2.55
+ */
+// '"' === ""
+// false
+
+function deriv(exp, variable) {
+  return is_number(exp)
+    ? 0
+    : is_variable(exp)
+    ? is_same_variable(exp, variable)
+      ? 1
+      : 0
+    : is_sum(exp)
+    ? make_sum(deriv(addend(exp), variable), deriv(augend(exp), variable))
+    : is_product(exp)
+    ? make_sum(
+        make_product(multiplier(exp), deriv(multiplicand(exp), variable)),
+        make_product(deriv(multiplier(exp), variable), multiplicand(exp))
+      )
+    : error(exp, "unknown expression type -- deriv");
+}
+
+function is_number(v) {
+  return typeof v === "number";
+}
+
+function is_variable(exp) {
+  return is_string(exp);
+}
+
+function is_string(v) {
+  return typeof v === "string";
+}
+
+function is_same_variable(v1, v2) {
+  return is_string(v1) && is_string(v2) && v1 === v2;
+}
+
+// improved at line 1613
+// function make_sum(a1, a2) {
+//   return list("+", a1, a2);
+// }
+
+// improved at line 1628
+// function make_product(m1, m2) {
+//   return list("*", m1, m2);
+// }
+
+function is_sum(exp) {
+  return is_pair(exp) && head(exp) === "+";
+}
+
+function addend(s) {
+  return head(tail(s));
+}
+
+function augend(s) {
+  return head(tail(tail(s)));
+}
+
+function is_product(s) {
+  return head(s) === "*";
+}
+
+function multiplier(s) {
+  return head(tail(s));
+}
+
+function multiplicand(s) {
+  return head(tail(tail(s)));
+}
+
+function make_sum(a1, a2) {
+  return number_equal(a1, 0)
+    ? a2
+    : number_equal(a2, 0)
+    ? a1
+    : is_number(a1) && is_number(a2)
+    ? a1 + a2
+    : list("+", a1, a2);
+}
+
+function number_equal(exp, number) {
+  return is_number(exp) && exp === number;
+}
+
+function make_product(m1, m2) {
+  return number_equal(m1, 0) || number_equal(m2, 0)
+    ? 0
+    : number_equal(m1, 1)
+    ? m2
+    : number_equal(m2, 1)
+    ? m1
+    : is_number(m1) && is_number(m2)
+    ? m1 * m2
+    : list("*", m1, m2);
+}
+
