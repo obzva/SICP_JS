@@ -1542,22 +1542,32 @@ function equal(a, b) {
 // '"' === ""
 // false
 
-function deriv(exp, variable) {
-  return is_number(exp)
-    ? 0
-    : is_variable(exp)
-    ? is_same_variable(exp, variable)
-      ? 1
-      : 0
-    : is_sum(exp)
-    ? make_sum(deriv(addend(exp), variable), deriv(augend(exp), variable))
-    : is_product(exp)
-    ? make_sum(
-        make_product(multiplier(exp), deriv(multiplicand(exp), variable)),
-        make_product(deriv(multiplier(exp), variable), multiplicand(exp))
-      )
-    : error(exp, "unknown expression type -- deriv");
-}
+// refactored at Exercise 2.56
+// function deriv(expression, variable) {
+//   return is_number(expression)
+//     ? 0
+//     : is_variable(expression)
+//     ? is_same_variable(expression, variable)
+//       ? 1
+//       : 0
+//     : is_sum(expression)
+//     ? make_sum(
+//         deriv(addend(expression), variable),
+//         deriv(augend(expression), variable)
+//       )
+//     : is_product(expression)
+//     ? make_sum(
+//         make_product(
+//           multiplier(expression),
+//           deriv(multiplicand(expression), variable)
+//         ),
+//         make_product(
+//           deriv(multiplier(expression), variable),
+//           multiplicand(expression)
+//         )
+//       )
+//     : error(expression, "unknown expression type -- deriv");
+// }
 
 function is_number(v) {
   return typeof v === "number";
@@ -1593,21 +1603,23 @@ function addend(s) {
   return head(tail(s));
 }
 
-function augend(s) {
-  return head(tail(tail(s)));
-}
+// refactored at Exercise 2.57
+// function augend(s) {
+//   return head(tail(tail(s)));
+// }
 
-function is_product(s) {
-  return head(s) === "*";
+function is_product(exp) {
+  return is_pair(exp) && head(exp) === "*";
 }
 
 function multiplier(s) {
   return head(tail(s));
 }
 
-function multiplicand(s) {
-  return head(tail(tail(s)));
-}
+// refactored at Exercise 2.57
+// function multiplicand(s) {
+//   return head(tail(tail(s)));
+// }
 
 function make_sum(a1, a2) {
   return number_equal(a1, 0)
@@ -1634,4 +1646,85 @@ function make_product(m1, m2) {
     ? m1 * m2
     : list("*", m1, m2);
 }
+
+/**
+ * Exercise 2.56
+ */
+function deriv(expression, variable) {
+  return is_number(expression)
+    ? 0
+    : is_variable(expression)
+    ? is_same_variable(expression, variable)
+      ? 1
+      : 0
+    : is_sum(expression)
+    ? make_sum(
+        deriv(addend(expression), variable),
+        deriv(augend(expression), variable)
+      )
+    : is_product(expression)
+    ? make_sum(
+        make_product(
+          multiplier(expression),
+          deriv(multiplicand(expression), variable)
+        ),
+        make_product(
+          deriv(multiplier(expression), variable),
+          multiplicand(expression)
+        )
+      )
+    : is_exp(expression)
+    ? make_product(
+        make_product(
+          exponent(expression),
+          make_exp(base(expression), make_sum(exponent(expression), -1))
+        ),
+        deriv(base(expression), variable)
+      )
+    : error(expression, "unknown expression type -- deriv");
+}
+
+function is_exp(exp) {
+  return is_pair(exp) && head(exp) === "**";
+}
+
+function make_exp(base, exponent) {
+  return number_equal(exponent, 0)
+    ? 1
+    : number_equal(exponent, 1)
+    ? base
+    : list("**", base, exponent);
+}
+
+function base(exp) {
+  return head(tail(exp));
+}
+
+function exponent(exp) {
+  return head(tail(tail(exp)));
+}
+
+/**
+ * Exercise 2.57
+ */
+function augend(s) {
+  return accumulate(make_sum, 0, tail(s));
+}
+
+function multiplicand(m) {
+  return accumulate(make_product, 1, tail(m));
+}
+
+/**
+ * Exercise 2.58
+ */
+/**
+ * a
+ */
+// You only need to change these functions to work with 'infix' notation.
+// is_sum, addend, augend, is_product, multiplier, and multiplicand
+
+/**
+ * b
+ */
 
