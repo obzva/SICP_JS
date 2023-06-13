@@ -1727,4 +1727,133 @@ function multiplicand(m) {
 /**
  * b
  */
+function items_before_first(op, s) {
+  console.log("ibf", op, s);
+  console.log(s);
+  const res =
+    head(s) === op ? null : pair(head(s), items_before_first(op, tail(s)));
+  console.log("res", res);
+  return res;
+}
 
+function items_after_first(op, s) {
+  console.log("iaf");
+  console.log(s);
+  const res = head(s) === op ? tail(s) : items_after_first(op, tail(s));
+  console.log("res", res);
+  return res;
+}
+
+function infix_make_sum(a1, a2) {
+  return number_equal(a1, 0)
+    ? a2
+    : number_equal(a2, 0)
+    ? a1
+    : is_number(a1) && is_number(a2)
+    ? a1 + a2
+    : list(a1, "+", a2);
+}
+
+function infix_is_sum(s) {
+  return is_pair(s) && member("+", s);
+}
+
+function infix_addend(s) {
+  return items_before_first("+", s);
+}
+
+function infix_augend(s) {
+  return items_after_first("+", s);
+}
+
+function infix_make_product(m1, m2) {
+  return number_equal(m1, 0) || number_equal(m2, 0)
+    ? 0
+    : number_equal(m1, 1)
+    ? m2
+    : number_equal(m2, 1)
+    ? m1
+    : is_number(m1) && is_number(m2)
+    ? m1 * m2
+    : list(m1, "*", m2);
+}
+
+function infix_is_product(s) {
+  return is_pair(s) && !member("+", s);
+}
+
+function infix_multiplier(s) {
+  return items_before_first("*", s);
+}
+
+function infix_multiplicand(s) {
+  return items_after_first("*", s);
+}
+
+function infix_deriv(expression, variable) {
+  return is_number(expression)
+    ? 0
+    : is_variable(expression)
+    ? is_same_variable(expression, variable)
+      ? 1
+      : 0
+    : infix_is_sum(expression)
+    ? infix_make_sum(
+        infix_deriv(infix_addend(expression), variable),
+        infix_deriv(infix_augend(expression), variable)
+      )
+    : infix_is_product(expression)
+    ? infix_make_sum(
+        infix_make_product(
+          infix_multiplier(expression),
+          infix_deriv(infix_multiplicand(expression), variable)
+        ),
+        infix_make_product(
+          infix_deriv(infix_multiplier(expression), variable),
+          infix_multiplicand(expression)
+        )
+      )
+    : "error";
+}
+
+function is_element_of_set(x, set) {
+  return is_null(set)
+    ? false
+    : equal(x, head(set))
+    ? true
+    : is_element_of_set(x, tail(set));
+}
+
+function adjoin_set(x, set) {
+  return is_element_of_set(x, set) ? set : pair(x, set);
+}
+
+function inetersection_set(set1, set2) {
+  return is_null(set1) || is_null(set2)
+    ? null
+    : is_element_of_set(head(set1), set2)
+    ? pair(head(set1), inetersection_set(tail(set1), set2))
+    : inetersection_set(tail(set1), set2);
+}
+
+/**
+ * Exercise 2.59
+ */
+function union_set(set1, set2) {
+  return is_null(set1)
+    ? set2
+    : adjoin_set(head(set1), union_set(tail(set1), set2));
+}
+
+/**
+ * Exercise 2.60
+ */
+// is_element_of_set and intersection_set remain still
+// time complexity of adjoin_set drops from O(n) to O(1)
+// function adjoin_set(x, set) {
+//   return pair(x, set);
+// }
+// time complexity of union_set drops from O(mn) to O(n) where n is the size of set1 and m the size of set 2
+// function union_set(set1, set2) {
+//   return append(set1, set2);
+// }
