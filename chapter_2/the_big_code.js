@@ -1816,25 +1816,28 @@ function infix_deriv(expression, variable) {
     : "error";
 }
 
-function is_element_of_set(x, set) {
-  return is_null(set)
-    ? false
-    : equal(x, head(set))
-    ? true
-    : is_element_of_set(x, tail(set));
-}
+// refactored at line 1862
+// function is_element_of_set(x, set) {
+//   return is_null(set)
+//     ? false
+//     : equal(x, head(set))
+//     ? true
+//     : is_element_of_set(x, tail(set));
+// }
 
-function adjoin_set(x, set) {
-  return is_element_of_set(x, set) ? set : pair(x, set);
-}
+// refactored at line 1891
+// function adjoin_set(x, set) {
+//   return is_element_of_set(x, set) ? set : pair(x, set);
+// }
 
-function inetersection_set(set1, set2) {
-  return is_null(set1) || is_null(set2)
-    ? null
-    : is_element_of_set(head(set1), set2)
-    ? pair(head(set1), inetersection_set(tail(set1), set2))
-    : inetersection_set(tail(set1), set2);
-}
+// refactored at line 1873
+// function inetersection_set(set1, set2) {
+//   return is_null(set1) || is_null(set2)
+//     ? null
+//     : is_element_of_set(head(set1), set2)
+//     ? pair(head(set1), inetersection_set(tail(set1), set2))
+//     : inetersection_set(tail(set1), set2);
+// }
 
 /**
  * Exercise 2.59
@@ -1857,3 +1860,65 @@ function union_set(set1, set2) {
 // function union_set(set1, set2) {
 //   return append(set1, set2);
 // }
+
+function is_element_of_set(x, set) {
+  return is_null(set)
+    ? false
+    : x === head(set)
+    ? true
+    : x < head(set)
+    ? false
+    : is_element_of_set(x, tail(set));
+}
+
+function intersection_set(set1, set2) {
+  if (is_null(set1) || is_null(set2)) {
+    return null;
+  } else {
+    const x1 = head(set1);
+    const x2 = head(set2);
+    return x1 === x2
+      ? pair(x1, intersection_set(tail(set1), tail(set2)))
+      : x1 < x2
+      ? intersection_set(tail(set1), set2)
+      : intersection_set(set1, tail(set2));
+  }
+}
+
+/**
+ * Exercise 2.61
+ */
+function adjoin_set(x, set) {
+  return is_null(set)
+    ? list(x)
+    : x === head(set)
+    ? set
+    : x < head(set)
+    ? pair(x, set)
+    : pair(head(set), adjoin_set(x, tail(set)));
+}
+
+/**
+ * Exercise 2.62
+ */
+function union_set(set1, set2) {
+  if (is_null(set1) && is_null(set2)) {
+    return null;
+  } else {
+    if (is_null(set1)) {
+      return set2;
+    } else {
+      if (is_null(set2)) {
+        return set1;
+      } else {
+        const x1 = head(set1);
+        const x2 = head(set2);
+        return x1 === x2
+          ? pair(x1, union_set(tail(set1), tail(set2)))
+          : x1 < x2
+          ? pair(x1, union_set(tail(set1), set2))
+          : pair(x2, union_set(set1, tail(set2)));
+      }
+    }
+  }
+}
